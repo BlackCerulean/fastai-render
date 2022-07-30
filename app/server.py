@@ -7,7 +7,7 @@ import os
 # from fastbook import *
 from fastai import *
 from fastai.imports import *
-from fastai.vision.image import *
+from fastai.vision import *
 from fastai.vision.all import *
 from io import BytesIO
 from starlette.applications import Starlette
