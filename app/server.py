@@ -1,38 +1,77 @@
+from copyreg import pickle
 import aiohttp
 import asyncio
 import uvicorn
+import os
+# import fastbook
+# from fastbook import *
 from fastai import *
-from fastai.vision import *
+from fastai.imports import *
+from fastai.vision.all import *
 from io import BytesIO
 from starlette.applications import Starlette
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import HTMLResponse, JSONResponse
 from starlette.staticfiles import StaticFiles
 
-export_file_url = 'https://drive.google.com/uc?export=download&id=1BGjvik7txqneiwTG9VIYcTtS9pxC9EKC'
+
+import requests
+
+def download_file_from_google_drive(id, destination):
+    URL = "https://docs.google.com/uc?export=download"
+
+    session = requests.Session()
+
+    response = session.get(URL, params = { 'id' : id }, stream = True)
+    token = get_confirm_token(response)
+
+    if token:
+        params = { 'id' : id, 'confirm' : token }
+        response = session.get(URL, params = params, stream = True)
+
+    save_response_content(response, destination)    
+
+def get_confirm_token(response):
+    for key, value in response.cookies.items():
+        if key.startswith('download_warning'):
+            return value
+
+    return None
+
+def save_response_content(response, destination):
+    CHUNK_SIZE = 32768
+
+    with open(destination, "wb") as f:
+        for chunk in response.iter_content(CHUNK_SIZE):
+            if chunk: # filter out keep-alive new chunks
+                f.write(chunk)
+
+export_file_url = '1BGjvik7txqneiwTG9VIYcTtS9pxC9EKC'
 export_file_name = 'THFood_20_epochs.pkl'
 
 classes = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48']
-path = Path(__file__).parent
+path = Path(__file__).resolve().parent
+
+model_paths = os.path.join(path, export_file_name)
 
 app = Starlette()
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_headers=['X-Requested-With', 'Content-Type'])
 app.mount('/static', StaticFiles(directory='app/static'))
 
 
-async def download_file(url, dest):
-    if dest.exists(): return
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
-            data = await response.read()
-            with open(dest, 'wb') as f:
-                f.write(data)
+# async def download_file(url, dest):
+#     if dest.exists(): return
+#     async with aiohttp.ClientSession() as session:
+#         async with session.get(url) as response:
+#             data = await response.read()
+#             with open(dest, 'wb') as f:
+#                 f.write(data)
 
 
 async def setup_learner():
-    await download_file(export_file_url, path / export_file_name)
+    # download_file_from_google_drive(export_file_url, path / export_file_name)
     try:
-        learn = load_learner(path, export_file_name)
+        learn = load_learner(model_paths)
         return learn
     except RuntimeError as e:
         if len(e.args) > 0 and 'CPU-only machine' in e.args[0]:
