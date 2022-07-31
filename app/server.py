@@ -105,7 +105,7 @@ async def analyze(request):
     img_bytes = await (img_data['file'].read())
     img = PILImage.create(BytesIO(img_bytes))
     prediction = learn.predict(img)[0]
-    return JSONResponse({'result': str(classes[prediction])})
+    return JSONResponse({'result': str(classes[int(prediction)])})
 
 
 if __name__ == '__main__':
