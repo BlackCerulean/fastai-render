@@ -50,7 +50,11 @@ def save_response_content(response, destination):
 export_file_url = '1BGjvik7txqneiwTG9VIYcTtS9pxC9EKC'
 export_file_name = 'THFood_20_epochs.pkl'
 
-classes = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48']
+classes = ['Chicken Green Curry','Pork Curry with Morning Glory','Spicy Mixed Vegetable Soup','Pork Chopped Tofu Soup','Stuffed Bitter Gourd Broth','Chicken Mussaman Curry','Sour Soup','Stir Fried Chicken with Chestnuts','Omelette','Fried Egg',
+           'Egg and Pork in Sweet Brown Sauce','Egg with Tamarind Sauce','Banana in Coconut Milk','Stir Fried Rice Noodles with Chicken','Fried Cabbage with Fish Sauce','Grilled River Prawn','Baked Prawns with Vermicelli','Coconut Rice Pancake','Mango Sticky Rice','Thai Pork Leg Stew',
+          'Shrimp Paste Fried Rice','Curried Noodle Soup with Chicken','Fried Rice','Shrimp Fried Rice','Steamed Capon in Flavored Rice','Thai Chicken Biryani','Thai Chicken Coconut Soup','River Prawn Spicy Soup','Fried Fish-Paste Balls','Deep Fried Spring Roll',
+          'Stir-Fried Chinese Morning Glory','Fried Noodle Thai Style with Prawn','Stir Fried Thai Basil with Minced Pork','Fried Noodle in Soy Sauce','Stir-Fried Pumpkin with Eggs','Stir-Fried Eggplant with Soybean Paste Sauce','Stir Fried Clams with Roasted Chili Paste','Golden Egg Yolk Threads','Chicken Panang','Thai Wing Beans Salad',
+          'Spicy Glass Noodle Salad','Spicy Minced Pork Salad','Egg Custard in Pumpkin','Tapioca Balls with Pork Filling','Green Papaya Salad','Thai-Style Grilled Porks Skewers','Pork Satay with Peanut Sauce','Steamed Fish with Curry Paste', 'Stir Fried Thai Basil with Minced Pork with Fried Egg on top']
 path = Path(__file__).resolve().parent
 
 model_paths = os.path.join(path, export_file_name)
